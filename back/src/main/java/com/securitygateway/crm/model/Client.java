@@ -42,4 +42,15 @@ public class Client {
     private User proprietario;
     private LocalDate validade;
     private LocalDateTime ultimaAtualizacao;
+
+    @PrePersist
+    private void onCreate() {
+        dataCriacao = LocalDateTime.now();
+        ultimaAtualizacao = dataCriacao;
+    }
+
+    @PreUpdate
+    private void onUpdate() {
+        ultimaAtualizacao = LocalDateTime.now();
+    }
 }
