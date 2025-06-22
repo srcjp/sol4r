@@ -131,7 +131,7 @@ public class AuthenticationServiceImplementation implements AuthenticationServic
         String emailEntered = registerVerifyRequest.getEmail().trim().toLowerCase();
         String otpEntered = registerVerifyRequest.getOtp().trim();
         try {
-            User user = userRepository.findByEmail(emailEntered).orElseThrow(
+            User user = userRepository.findByEmailAndDeletedFalse(emailEntered).orElseThrow(
                     ResourceNotFoundException::new
             );
             String cachedOtp = cacheManager.getCache("user").get(emailEntered, String.class);
@@ -161,7 +161,7 @@ public class AuthenticationServiceImplementation implements AuthenticationServic
         String email = loginRequest.getEmail().trim().toLowerCase();
         String password = loginRequest.getPassword();
         try {
-            User user = userRepository.findByEmail(email).orElseThrow(
+            User user = userRepository.findByEmailAndDeletedFalse(email).orElseThrow(
                         ResourceNotFoundException::new
                 );
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -199,7 +199,7 @@ public class AuthenticationServiceImplementation implements AuthenticationServic
     public ResponseEntity<?> resendOtp(ForgotPasswordRequest forgotPasswordRequest) {
         String email = forgotPasswordRequest.getEmail().trim().toLowerCase();
         try {
-            User user = userRepository.findByEmail(email).orElseThrow(
+            User user = userRepository.findByEmailAndDeletedFalse(email).orElseThrow(
                     ResourceNotFoundException::new
             );
             String otpToBeSend = otpService.getOtpForEmail(email);
@@ -231,7 +231,7 @@ public class AuthenticationServiceImplementation implements AuthenticationServic
         String email = registerVerifyRequest.getEmail().trim().toLowerCase();
         String otp = registerVerifyRequest.getOtp().trim();
         try {
-            User user = userRepository.findByEmail(email).orElseThrow(
+            User user = userRepository.findByEmailAndDeletedFalse(email).orElseThrow(
                     ResourceNotFoundException::new
             );
         } catch (ResourceNotFoundException ex) {
@@ -261,7 +261,7 @@ public class AuthenticationServiceImplementation implements AuthenticationServic
             return new ResponseEntity<>(GeneralAPIResponse.builder().message("Password and confirm password do not match").build(), HttpStatus.BAD_REQUEST);
         }
         try {
-            User user = userRepository.findByEmail(email).orElseThrow(
+            User user = userRepository.findByEmailAndDeletedFalse(email).orElseThrow(
                     ResourceNotFoundException::new
             );
             user.setPassword(passwordEncoder.encode(newPassword));
@@ -279,7 +279,7 @@ public class AuthenticationServiceImplementation implements AuthenticationServic
     public ResponseEntity<?> myProfile(ForgotPasswordRequest forgotPasswordRequest) {
         String email = forgotPasswordRequest.getEmail().trim().toLowerCase();
         try {
-            User user = userRepository.findByEmail(email).orElseThrow(
+            User user = userRepository.findByEmailAndDeletedFalse(email).orElseThrow(
                     ResourceNotFoundException::new
             );
             return new ResponseEntity<>(UserProfile.builder()

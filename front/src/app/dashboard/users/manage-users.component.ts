@@ -21,7 +21,7 @@ import { User, Role } from '../../models/user.model';
       </thead>
       <tbody>
         <tr *ngFor="let u of users">
-          <td>{{ u.firstName }} {{ u.lastName }}</td>
+          <td>{{ u.name.fullName }}</td>
           <td>{{ u.phoneNumber }}</td>
           <td>{{ u.email }}</td>
           <td>
@@ -37,11 +37,11 @@ import { User, Role } from '../../models/user.model';
     <form (ngSubmit)="save()">
       <label>
         Nome:
-        <input name="firstName" [(ngModel)]="selected.firstName" />
+        <input name="firstName" [(ngModel)]="selected.name.firstName" />
       </label>
       <label>
         Sobrenome:
-        <input name="lastName" [(ngModel)]="selected.lastName" />
+        <input name="lastName" [(ngModel)]="selected.name.lastName" />
       </label>
       <label>
         Telefone:

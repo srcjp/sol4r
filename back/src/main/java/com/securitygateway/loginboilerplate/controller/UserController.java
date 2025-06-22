@@ -20,7 +20,7 @@ public class UserController {
 
     @GetMapping
     public List<User> list() {
-        return userRepository.findAll(Sort.by(Sort.Direction.ASC, "name.firstName"));
+        return userRepository.findByDeletedFalse(Sort.by(Sort.Direction.ASC, "name.firstName"));
     }
 
     @PutMapping("/{id}")
@@ -51,11 +51,13 @@ public class UserController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (!userRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        userRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return userRepository.findById(id)
+                .map(user -> {
+                    user.setDeleted(true);
+                    userRepository.save(user);
+                    return ResponseEntity.noContent().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     public record RoleChangeRequest(Role role) {}
