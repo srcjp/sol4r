@@ -10,8 +10,10 @@
     <a routerLink="sales/finished">VENDAS FINALIZADAS</a>
     <h3>Clientes</h3>
     <a routerLink="clients">GERENCIAR CLIENTES</a>
-    <h3>Usuários</h3>
-    <a routerLink="users">GERENCIAR USUÁRIOS</a>
+    <ng-container *ngIf="isAdmin">
+      <h3>Usuários</h3>
+      <a routerLink="users">GERENCIAR USUÁRIOS</a>
+    </ng-container>
   </nav>
   <div class="content">
     <router-outlet></router-outlet>
