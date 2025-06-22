@@ -4,6 +4,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { VerifyComponent } from './auth/verify/verify.component';
 import { RecoveryComponent } from './auth/recovery/recovery.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
+import { AuthGuard } from './core/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -12,5 +13,10 @@ export const routes: Routes = [
   { path: 'verify', component: VerifyComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'recovery', component: RecoveryComponent },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./dashboard/dashboard.routes').then(m => m.dashboardRoutes),
+    canActivate: [AuthGuard]
+  },
   { path: '**', redirectTo: 'login' }
 ];
