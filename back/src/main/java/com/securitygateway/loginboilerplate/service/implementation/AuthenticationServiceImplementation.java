@@ -236,7 +236,7 @@ public class AuthenticationServiceImplementation implements AuthenticationServic
             );
         } catch (ResourceNotFoundException ex) {
             log.info("user with email {} not found in database ", email);
-            return new ResponseEntity<>(GeneralAPIResponse.builder().message("iUser with this email does not exist").build(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(GeneralAPIResponse.builder().message("User with this email does not exist").build(), HttpStatus.NOT_FOUND);
         }
         String cachedOtp = cacheManager.getCache("user").get(email, String.class);
         if (cachedOtp == null) {
