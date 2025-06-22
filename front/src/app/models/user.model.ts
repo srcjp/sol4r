@@ -7,12 +7,18 @@ export enum Role {
   VENDEDOR = 'VENDEDOR'
 }
 
-export interface User {
-  id: number;
+export interface Name {
   firstName: string;
   lastName: string;
+  fullName: string;
+}
+
+export interface User {
+  id: number;
+  name: Name;
   email: string;
   phoneNumber: string;
   gender?: string;
   role: Role;
+  fullName: string;
 }
