@@ -59,7 +59,7 @@ public class UserController {
                     // Explicitly set the generic type to avoid Optional inferring Object
                     return ResponseEntity.<Void>noContent().build();
                 })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.<Void>notFound().build());
     }
 
     public record RoleChangeRequest(Role role) {}
