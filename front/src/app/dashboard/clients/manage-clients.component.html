@@ -1,0 +1,46 @@
+<div>
+  <table class="clients-table">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>CPF</th>
+        <th>Cidade</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of clients">
+        <td>{{ c.email }}</td>
+        <td>{{ c.cpf }}</td>
+        <td>{{ c.cidade }}</td>
+        <td>
+          <button (click)="edit(c)">Editar</button>
+          <button (click)="confirmRemove(c.id)">Remover</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button class="add-button" (click)="openAdd()">Adicionar cliente</button>
+
+  <div class="popup" *ngIf="popupOpen">
+    <form (ngSubmit)="save()" class="form">
+      <label>CPF:
+        <input name="cpf" [(ngModel)]="selected.cpf" required>
+      </label>
+      <label>Email:
+        <input name="email" [(ngModel)]="selected.email" required>
+      </label>
+      <label>Cidade:
+        <input name="cidade" [(ngModel)]="selected.cidade">
+      </label>
+      <label>Origem:
+        <input name="origem" [(ngModel)]="selected.origem">
+      </label>
+      <div class="actions">
+        <button type="submit">Salvar</button>
+        <button type="button" (click)="cancel()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
