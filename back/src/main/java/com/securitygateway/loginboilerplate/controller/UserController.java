@@ -51,13 +51,15 @@ public class UserController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        return userRepository.findById(id)
+        return userRepository
+                .findById(id)
                 .map(user -> {
                     user.setDeleted(true);
                     userRepository.save(user);
-                    return ResponseEntity.noContent().build();
+                    // Explicitly set the generic type to avoid Optional inferring Object
+                    return ResponseEntity.<Void>noContent().build();
                 })
-                .orElse(ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     public record RoleChangeRequest(Role role) {}
