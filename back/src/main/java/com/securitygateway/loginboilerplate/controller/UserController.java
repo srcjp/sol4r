@@ -1,5 +1,6 @@
 package com.securitygateway.loginboilerplate.controller;
 
+
 import com.securitygateway.loginboilerplate.model.Role;
 import com.securitygateway.loginboilerplate.model.User;
 import com.securitygateway.loginboilerplate.repository.UserRepository;
@@ -50,7 +51,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
         return userRepository
                 .findById(id)
                 .map(user -> {
