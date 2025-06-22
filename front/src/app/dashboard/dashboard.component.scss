@@ -1,0 +1,23 @@
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+}
+
+.menu {
+  width: 200px;
+  padding: 1rem;
+  background: #f3f3f3;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #333;
+}
+
+.content {
+  flex: 1;
+  padding: 1rem;
+}

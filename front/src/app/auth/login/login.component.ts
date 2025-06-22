@@ -79,7 +79,7 @@ export class LoginComponent implements OnInit {
         this.loading = false;
         localStorage.setItem('accessToken', res.accessToken);
         this.snackBar.open("logou", 'Fechar', { duration: 3000 });
-        this.router.navigate(['/products']);
+        this.router.navigate(['/dashboard']);
       },
       error: err => {
         this.loading = false;
