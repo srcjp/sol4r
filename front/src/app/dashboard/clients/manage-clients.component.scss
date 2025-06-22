@@ -1,0 +1,29 @@
+.clients-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.clients-table th,
+.clients-table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+.add-button {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+}
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 16px;
+  border: 1px solid #ccc;
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}

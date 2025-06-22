@@ -80,4 +80,46 @@ public class EmailService {
         javaMailSender.send(message);
         log.info("Email has been sent successfully to {}", to);
     }
+
+    @Async
+    @Retryable(
+            retryFor = MessagingException.class,
+            maxAttempts = 4,
+            backoff = @Backoff(delay = 3000)
+    )
+    public CompletableFuture<Integer> sendWelcomeEmail(String to, String password) throws MessagingException, UnsupportedEncodingException {
+        try {
+            sendWelcomeMessage(to, password);
+            return CompletableFuture.completedFuture(1);
+        } catch (MessagingException e) {
+            return CompletableFuture.completedFuture(handleMessagingException(e));
+        } catch (UnsupportedEncodingException e) {
+            return CompletableFuture.completedFuture(handleUnsupportedEncodingException(e));
+        }
+    }
+
+    public void sendWelcomeMessage(String to, String password) throws MessagingException, UnsupportedEncodingException {
+        log.info("Sending welcome email to {}", to);
+
+        String senderName = "imobilizeai";
+        String from = "imobilizeai@gmail.com";
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setFrom(from, senderName);
+        helper.setTo(to);
+        helper.setSubject("Conta criada com sucesso");
+
+        String htmlContent = "<html>" +
+                "<body>" +
+                "<p>Conta criada e verificada.</p>" +
+                "<p>Sua senha inicial é <strong>" + password + "</strong></p>" +
+                "</body>" +
+                "</html>";
+        helper.setText(htmlContent, true);
+
+        javaMailSender.send(message);
+        log.info("Welcome email has been sent successfully to {}", to);
+    }
 }

@@ -2,7 +2,14 @@ package com.securitygateway.crm.controller;
 
 import com.securitygateway.crm.model.Client;
 import com.securitygateway.crm.repository.ClientRepository;
+import com.securitygateway.loginboilerplate.model.Gender;
+import com.securitygateway.loginboilerplate.model.Role;
+import com.securitygateway.loginboilerplate.model.User;
+import com.securitygateway.loginboilerplate.model.Username;
+import com.securitygateway.loginboilerplate.repository.UserRepository;
+import com.securitygateway.loginboilerplate.service.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +25,9 @@ import java.util.UUID;
 public class ClientController {
 
     private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @GetMapping
     public List<Client> all() {
@@ -28,7 +38,26 @@ public class ClientController {
     public ResponseEntity<Client> create(@RequestBody Client client) {
         client.setDataCriacao(LocalDateTime.now());
         client.setUltimaAtualizacao(LocalDateTime.now());
-        return new ResponseEntity<>(clientRepository.save(client), HttpStatus.CREATED);
+        Client saved = clientRepository.save(client);
+
+        if (client.getEmail() != null && client.getCpf() != null) {
+            String rawPassword = "a" + client.getCpf() + "!";
+            User user = User.builder()
+                    .name(new Username("Cliente", client.getCpf()))
+                    .email(client.getEmail().toLowerCase())
+                    .password(passwordEncoder.encode(rawPassword))
+                    .gender(Gender.MALE)
+                    .role(Role.USER)
+                    .isVerified(true)
+                    .build();
+            userRepository.save(user);
+            try {
+                emailService.sendWelcomeEmail(client.getEmail(), rawPassword);
+            } catch (Exception ignored) {
+            }
+        }
+
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
