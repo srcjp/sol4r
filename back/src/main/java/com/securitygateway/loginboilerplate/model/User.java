@@ -40,7 +40,7 @@ public class User implements UserDetails {
 
     @NotBlank(message = "Password can't be blank")
     @Column(nullable = false)
-    private String Password;
+    private String password;
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Choose your gender please")
