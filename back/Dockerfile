@@ -3,6 +3,6 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 FROM openjdk:17.0.1-jdk-slim
-COPY --from=build target/LoginBoilerplate-0.0.1-SNAPSHOT.jar LoginBoilerplate.jar
+COPY --from=build target/sol4r-0.0.1-SNAPSHOT.jar sol4r.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "LoginBoilerplate.jar"]
+ENTRYPOINT ["java", "-jar", "sol4r.jar"]
